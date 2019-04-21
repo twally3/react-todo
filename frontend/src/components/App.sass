@@ -1,8 +1,22 @@
+$primary: #3F51B5
+// $primary: #00BCD4
+$text-color: #ffffff
+$secondary: #F50057
+$secondary-text-color: #ffffff
+
 html
   background-color: #222222
 
 body
-  background: cornflowerblue
+  background: $primary
+  color: $text-color !important
+
+.is-primary
+	background-color: $secondary !important
+	color: $secondary-text-color !important
+
+.bold
+	font-weight: bold
 
 .App
   text-align: center
@@ -21,8 +35,8 @@ body
   flex: 1
   flex-direction: column
 
-.white
-  color: white !important
+.bg-text-color
+  color: $text-color !important
 
 .checkbox
   margin-right: 10px

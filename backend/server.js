@@ -37,6 +37,6 @@ app.use(router.allowedMethods());
 
 app.use(require('koa-static')('./build'));
 
-mongoose.connect(process.env.DATABASE);
+mongoose.connect(process.env.DATABASE, { useNewUrlParser: true });
 
 module.exports = app;

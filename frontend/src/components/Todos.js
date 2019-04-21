@@ -39,7 +39,7 @@ class Todos extends Component {
 
 		return (
 			<section className="section full-column">
-				<h1 className="title white">Todos</h1>
+				<h1 className="title bg-text-color">TODO</h1>
 				<div className="error">{error}</div>
 
 				<form className="form" onSubmit={this.addTodo.bind(this)}>
@@ -58,11 +58,11 @@ class Todos extends Component {
 
 						<div className="control">
 							<button
-								className={`button is-success ${(isLoading || isSaving) &&
+								className={`button is-primary bold ${(isLoading || isSaving) &&
 									'is-loading'}`}
 								disabled={isLoading || isSaving}
 							>
-								Add
+								+
 							</button>
 						</div>
 					</div>
@@ -78,8 +78,10 @@ class Todos extends Component {
 							onToggle={() => toggleTodo(todo._id)}
 						/>
 					))}
-					<div className="white">
-						Total: {total} , Complete: {complete} , Incomplete: {incomplete}
+					<div className="bg-text-color">
+						<p>Total: {total}</p>
+						<p>Complete: {complete}</p>
+						<p>Incomplete: {incomplete}</p>
 					</div>
 				</div>
 			</section>
