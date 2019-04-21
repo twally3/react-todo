@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "nodemon --inspect index",
-    "start": "cross-env NODE_ENVIRONMENT=production node index"
+		"start": "cross-env NODE_ENVIRONMENT=production node index",
+		"test": "echo \"Hello World\""
   },
   "dependencies": {
     "@koa/cors": "2",
