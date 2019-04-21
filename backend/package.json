@@ -1,11 +1,12 @@
 {
-	"name": "backend",
+  "name": "backend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "nodemon --inspect index",
-		"start": "cross-env NODE_ENVIRONMENT=production node index",
-		"test": "echo \"Hello World\""
+    "start": "cross-env NODE_ENVIRONMENT=production node index",
+    "test": "npm run lint",
+    "lint": "./node_modules/eslint/bin/eslint.js **/*.js"
   },
   "dependencies": {
     "@koa/cors": "2",
@@ -21,6 +22,9 @@
     "mongoose": "^5.5.2"
   },
   "devDependencies": {
-    "nodemon": "^1.18.11"
+    "eslint": "^5.16.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "nodemon": "^1.18.11",
+    "prettier": "^1.17.0"
   }
 }
