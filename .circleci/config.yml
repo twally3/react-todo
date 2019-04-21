@@ -19,6 +19,10 @@ jobs:
     steps:
       - checkout
 
+      - run: 
+          name: "Setup custom environment variables"
+          command: echo 'export CI="true"' >> $BASH_ENV
+
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}-{{ checksum "backend/package.json" }}-{{ checksum "frontend/package.json" }}
