@@ -11,7 +11,7 @@ async function create(ctx) {
 
 async function destroy(ctx) {
 	const { id } = ctx.params;
-	ctx.body = await Todo.findByIdAndRemove({ _id: id });
+	ctx.body = await Todo.findOneAndDelete({ _id: id });
 }
 
 async function update(ctx) {
