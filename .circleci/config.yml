@@ -29,9 +29,9 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: npm i
-      - run: cd backend && npm i
-      - run: cd frontend && npm i
+      - run: npm i --only=production
+      - run: cd backend && npm i --only=production
+      - run: cd frontend && npm i --only=production
 
       - save_cache:
           paths:
