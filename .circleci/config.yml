@@ -14,12 +14,9 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}-{{ checksum "backend/package.json" }}-{{ checksum "frontend/package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-      - run:
-          name: npm install
-          command: |
-            npm i --only=production
-            cd backend && npm i --only=production
-            cd ../frontend && npm i --only=production
+      - run: npm i --only=production
+      - run: cd backend && npm i --only=production
+      - run: cd frontend && npm i --only=production
       - run: npm test
       - save_cache:
           paths:
@@ -57,12 +54,6 @@ jobs:
           root: .
           paths:
             - docker-cache
-      - save_cache:
-          paths:
-            - node_modules
-            - backend/node_modules
-            - frontend/node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}-{{ checksum "backend/package.json" }}-{{ checksum "frontend/package.json" }} 
 
   push:
     docker:
