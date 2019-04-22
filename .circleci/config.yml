@@ -6,8 +6,6 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run: 
           name: "Setup custom environment variables"
           command: echo 'export CI=true' >> $BASH_ENV
@@ -23,6 +21,31 @@ jobs:
             cd backend && npm i --only=production
             cd ../frontend && npm i --only=production
       - run: npm test
+      - save_cache:
+          paths:
+            - node_modules
+            - backend/node_modules
+            - frontend/node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}-{{ checksum "backend/package.json" }}-{{ checksum "frontend/package.json" }} 
+  build:
+    docker:
+      - image: circleci/node:7.10
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: 
+          name: "Setup custom environment variables"
+          command: echo 'export CI=true' >> $BASH_ENV
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}-{{ checksum "backend/package.json" }}-{{ checksum "frontend/package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run:
+          name: npm install
+          command: cd frontend && npm i
       - run:
           name: Build docker image
           command: |
@@ -85,8 +108,15 @@ workflows:
   version: 2
   test_build_push:
     jobs:
+      - test:
+          context: todo-context
       - build:
           context: todo-context
+          requires:
+            - test
+          # filters:
+          #   branches:
+          #     only: master
       - push:  
           context: todo-context
           requires:
