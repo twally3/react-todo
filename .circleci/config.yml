@@ -82,7 +82,9 @@ jobs:
 
       - run:
           name: Push to registry
-          command: docker push eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1
+          command: |
+            docker tag eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1 eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:latest
+            docker push eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}
 
   
 workflows:
