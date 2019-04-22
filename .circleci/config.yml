@@ -114,20 +114,20 @@ workflows:
           context: todo-context
           requires:
             - test
-          # filters:
-          #   branches:
-          #     only: master
+          filters:
+            branches:
+              only: master
       - push:  
           context: todo-context
           requires:
             - build
-          # filters:
-          #   branches:
-          #     only: master
+          filters:
+            branches:
+              only: master
       - deploy-staging:
           context: todo-context
           requires:
             - push
-          # filters:
-          #   branches:
-          #     only: master
+          filters:
+            branches:
+              only: master
