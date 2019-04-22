@@ -16,9 +16,9 @@ const Todo = ({ todo, id, onDelete, onToggle }) => (
 			</label>
 		</div>
 		<div className="level-right">
-			<a className="delete level-item" onClick={onDelete}>
+			<span className="delete level-item" onClick={onDelete}>
 				Delete
-			</a>
+			</span>
 		</div>
 	</div>
 );
