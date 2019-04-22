@@ -45,6 +45,8 @@ jobs:
 
       - run: npm test
 
-      - run: |
-        npm run build
-        docker build -t $IMAGE_NAME:$TAG .
+      - run: 
+          name: Build and push docker
+          command: |
+            npm run build
+            docker build -t $IMAGE_NAME:$TAG .
