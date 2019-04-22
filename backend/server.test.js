@@ -55,7 +55,6 @@ describe('POST /v1/todos', () => {
 
 describe('PUT /v1/todos/:id', () => {
 	test('should respond as expected', async () => {
-		const server = require('./server');
 		const response = await request(server)
 			.put('/v1/todos/5cbcfd42dc5d3934167f335d')
 			.send()
