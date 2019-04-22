@@ -4,7 +4,7 @@ const { findAll, create, update, destroy } = require('../controllers/todos');
 
 router.get('/', findAll);
 router.post('/', create);
-router.post('/:id', update);
+router.put('/:id', update);
 router.delete('/:id', destroy);
 
 module.exports = router.routes();
