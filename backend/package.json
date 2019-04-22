@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon --inspect index",
-    "start": "cross-env NODE_ENVIRONMENT=production node index",
+    "start": "cross-env NODE_ENV=production node index",
     "test": "npm run lint && npm run jest",
     "jest": "jest --env=node",
     "lint": "./node_modules/eslint/bin/eslint.js **/*.js"
