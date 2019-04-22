@@ -23,7 +23,6 @@ jobs:
           name: "Setup custom environment variables"
           command: |
             echo 'export CI=true' >> $BASH_ENV
-            echo 'export TAG=${CIRCLE_BUILD_NUM}' >> $BASH_ENV
             echo 'export IMAGE_NAME=todo' >> $BASH_ENV
 
       - restore_cache:
@@ -52,4 +51,8 @@ jobs:
           name: Build and push docker
           command: |
             npm run build
-            docker build -t $IMAGE_NAME:$TAG .
+            echo ${GOOGLE_AUTH} > ${HOME}/gcp-key.json
+            docker build --rm=false -t eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1 .
+            gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
+            gcloud --quiet config set project ${GCP_PROJECT}
+            gcloud docker -- push eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1
