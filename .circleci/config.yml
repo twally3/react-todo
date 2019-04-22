@@ -86,14 +86,14 @@ jobs:
   
 workflows:
   version: 2
-    test_build_push:
-      jobs:
-        - build:
-          context: todo-context
-        - push:  
-          context: todo-context
-          requires:
-            - build
+  test_build_push:
+    jobs:
+      - build:
+        context: todo-context
+      - push:  
+        context: todo-context
+        requires:
+          - build
       
 
       # - run: 
