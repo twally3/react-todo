@@ -78,8 +78,8 @@ jobs:
             gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
             gcloud --quiet config set project ${GCP_PROJECT}
       - run:
-        name: Deploy to staging
-        command: gcloud run deploy ${IMAGE_NAME} --image eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1
+          name: Deploy to staging
+          command: gcloud run deploy ${IMAGE_NAME} --image eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1
   
 workflows:
   version: 2
