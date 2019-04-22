@@ -35,17 +35,17 @@ jobs:
       - run: npm test
 
       - run:
-        name: Build docker image
-        command: |
-          npm run build
-          docker build --rm=false -t eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1 .
-          mkdir -p docker-cache
-          docker save -o docker-cache/built-image.tar eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1
+          name: Build docker image
+          command: |
+            npm run build
+            docker build --rm=false -t eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1 .
+            mkdir -p docker-cache
+            docker save -o docker-cache/built-image.tar eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1
 
       - persist_to_workspace:
-        root: .
-        paths:
-          - docker-cache
+          root: .
+          paths:
+            - docker-cache
 
       
       - save_cache:
