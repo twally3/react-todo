@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import 'bulma/css/bulma.css';
 import { connect } from 'react-redux';
 import { addTodo, toggleTodo, deleteTodo, fetchTodos } from '../actions/todos';
 import Todo from './Todo';
@@ -39,7 +38,7 @@ class Todos extends Component {
 
 		return (
 			<section className="section full-column">
-				<h1 className="title bg-text-color">TODO</h1>
+				<h1 className="title bg-text-color">Crazy Todo</h1>
 				<div className="error">{error}</div>
 
 				<form className="form" onSubmit={this.addTodo.bind(this)}>
@@ -79,9 +78,9 @@ class Todos extends Component {
 						/>
 					))}
 					<div className="bg-text-color">
-						<p>Total: {total}</p>
-						<p>Complete: {complete}</p>
-						<p>Incomplete: {incomplete}</p>
+						<p><b>Total: {total}</b></p>
+						<p><b>Complete: {complete}</b></p>
+						<p><b>Incomplete: {incomplete}</b></p>
 					</div>
 				</div>
 			</section>
