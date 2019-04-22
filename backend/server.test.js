@@ -24,12 +24,6 @@ jest.mock('./controllers/todos.js', () => ({
 
 beforeEach(() => {
 	jest.resetModules();
-	process.env = { ...OLD_ENV };
-	delete process.env.NODE_ENV;
-});
-
-afterEach(() => {
-	// server.close();
 });
 
 describe('GET /v1/todos', () => {
