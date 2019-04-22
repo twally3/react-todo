@@ -97,7 +97,7 @@ workflows:
       - deploy-staging:
           context: todo-context
           requires:
-            - build
+            - push
           # filters:
           #   branches:
           #     only: master
