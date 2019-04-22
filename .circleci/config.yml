@@ -1,53 +1,24 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
 version: 2
 jobs:
-  build:
+  test:
     docker:
-      # specify the version you desire here
       - image: circleci/node:7.10
-
     working_directory: ~/repo
-
-    steps:
+    steps: 
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-
       - run: 
           name: "Setup custom environment variables"
           command: |
             echo 'export CI=true' >> $BASH_ENV
-            echo 'export IMAGE_NAME=todo' >> $BASH_ENV
-
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}-{{ checksum "backend/package.json" }}-{{ checksum "frontend/package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-
       - run: npm i --only=production
       - run: cd backend && npm i --only=production
       - run: cd frontend && npm i --only=production
-
       - run: npm test
-
-      - run:
-          name: Build docker image
-          command: |
-            npm run build
-            docker build --rm=false -t eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1 .
-            mkdir -p docker-cache
-            docker save -o docker-cache/built-image.tar eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1
-
-      - persist_to_workspace:
-          root: .
-          paths:
-            - docker-cache
-
-      
       - save_cache:
           paths:
             - node_modules
@@ -55,23 +26,39 @@ jobs:
             - frontend/node_modules
           key: v1-dependencies-{{ checksum "package.json" }}-{{ checksum "backend/package.json" }}-{{ checksum "frontend/package.json" }}
 
+  build:
+    docker:
+      - image: circleci/node:7.10
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build docker image
+          command: |
+            npm run build
+            docker build --rm=false -t eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1 .
+            mkdir -p docker-cache
+            docker save -o docker-cache/built-image.tar eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1
+      - persist_to_workspace:
+          root: .
+          paths:
+            - docker-cache
+
   push:
     docker:
       - image: google/cloud-sdk
-
     working_directory: ~/repo
-
     steps:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
       - attach_workspace: 
           at: .
-
       - run:
           name: Load docker image from cache
           command: docker load --input docker-cache/built-image.tar
-
       - run:
           name: Authenticate GCloud
           command: |
@@ -79,32 +66,23 @@ jobs:
             gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
             gcloud --quiet config set project ${GCP_PROJECT}
             gcloud auth configure-docker
-
       - run:
           name: Push to registry
           command: |
-            echo docker push eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}
+            docker tag eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1 eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:latest
             docker push eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}
-
   
 workflows:
   version: 2
   test_build_push:
     jobs:
+      - test:
+          context: todo-context
       - build:
           context: todo-context
+          requires:
+            - test
       - push:  
           context: todo-context
           requires:
             - build
-      
-
-      # - run: 
-      #     name: Build and push docker
-      #     command: |
-      #       npm run build
-      #       echo ${GOOGLE_AUTH} > ${HOME}/gcp-key.json
-      #       docker build --rm=false -t eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1 .
-      #       gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
-      #       gcloud --quiet config set project ${GCP_PROJECT}
-      #       gcloud docker -- push eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1
