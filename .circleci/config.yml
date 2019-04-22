@@ -46,7 +46,6 @@ jobs:
       - image: google/cloud-sdk
     working_directory: ~/repo
     steps:
-      - checkout
       - setup_remote_docker:
           docker_layer_caching: true
       - attach_workspace: 
@@ -77,6 +76,7 @@ jobs:
             echo ${GOOGLE_AUTH} > ${HOME}/gcp-key.json
             gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
             gcloud --quiet config set project ${GCP_PROJECT}
+            gcloud --queit config set compute/region ${GCP_REGION}
       - run:
           name: Deploy to staging
           command: gcloud beta run deploy ${IMAGE_NAME} --quiet --image eu.gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_SHA1
